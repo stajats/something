@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WASM C++ Output</title>
+</head>
+<body>
+  <h2>WebAssembly Output:</h2>
+  <pre id="output"></pre>
+
+  <script>
+    var Module = {
+      print: function(text) {
+        document.getElementById("output").innerText += text + "\n";
+      }
+    };
+  </script>
+  <script src="index.js"></script>
+</body>
+</html>
+
