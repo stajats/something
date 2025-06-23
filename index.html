@@ -1,21 +1,46 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>WASM C++ Output</title>
+  <meta charset="UTF-8" />
+  <title>WASM C++ Interactive Input</title>
+  <style>
+    body { font-family: monospace; margin: 20px; }
+    #output { white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; }
+    #userInput { width: 100%; font-family: monospace; font-size: 1rem; padding: 5px; }
+  </style>
 </head>
 <body>
-  <h2>WebAssembly Output:</h2>
+  <h2>WebAssembly C++ Interactive Input</h2>
   <pre id="output"></pre>
+  <input id="userInput" type="text" placeholder="Type here and press Enter" autocomplete="off" />
 
   <script>
+    var inputBuffer = [];
     var Module = {
       print: function(text) {
-        document.getElementById("output").innerText += text + "\n";
+        const output = document.getElementById('output');
+        output.innerText += text + "\n";
+        output.scrollTop = output.scrollHeight; // scroll to bottom
+      },
+      stdin: function() {
+        if (inputBuffer.length === 0) {
+          return -1; // tell WASM no input yet, pause execution until input
+        }
+        return inputBuffer.shift().charCodeAt(0);
       }
     };
+
+    document.getElementById('userInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const val = e.target.value + '\n';
+        for (let i = 0; i < val.length; i++) {
+          inputBuffer.push(val[i]);
+        }
+        e.target.value = '';
+      }
+    });
   </script>
+
   <script src="index.js"></script>
 </body>
 </html>
-
